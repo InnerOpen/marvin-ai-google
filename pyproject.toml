@@ -1,6 +1,6 @@
 [project]
 name = "marvin-ai-google"
-version = "0.1.0"
+version = "0.1.1"
 description = "Google Gemini for Marvin: the Gemini API (google-genai) as an AI provider plugin."
 readme = "README.md"
 requires-python = ">=3.11"

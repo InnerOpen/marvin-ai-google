@@ -146,7 +146,7 @@ class GoogleProvider(AIProvider):
     supports_embeddings = True
     supports_tool_calls = True
     prices = GOOGLE_PRICES
-    default_model = "gemini-2.5-flash"
+    default_model = "gemini-3.8-flash"
     suggested_models = tuple(m for m in GOOGLE_PRICES if "embedding" not in m)
     default_embedding_model = "gemini-embedding-001"
 

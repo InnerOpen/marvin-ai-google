@@ -33,7 +33,7 @@ else changes. **Admin → Plugins** lists `marvin-ai-google` with kind *AI provi
 |---|---|
 | `GOOGLE_API_KEY` | secret, masked; a workspace in *workspace* credential mode uses its own key |
 
-The default chat model is `gemini-2.5-flash` and the default embedding model `gemini-embedding-001`
+The default chat model is `gemini-3.8-flash` and the default embedding model `gemini-embedding-001`
 (3072 dimensions by default). The model list comes from the API (models that can generate content, minus
 embedding, image, speech and live variants).
 
