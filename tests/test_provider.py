@@ -155,3 +155,9 @@ def test_embeddings_go_in_batches_of_a_hundred(provider, server):
 def test_list_models_offers_chat_models_only(provider, server):
     server.reply_models(["gemini-2.5-flash", "gemini-2.5-flash-image", "gemini-embedding-001", "gemini-2.5-flash-preview-tts", "gemini-2.5-pro"])
     assert provider.list_models() == ["gemini-2.5-flash", "gemini-2.5-pro"]
+
+
+def test_cached_prompt_tokens_come_from_cached_content_token_count(server):
+    server.reply_text("ok", prompt_tokens=20000, completion_tokens=5, cached=18000)
+    result = GoogleProvider(api_key="test-key", http_client=server.client()).complete([Message("user", "hi")], "gemini-3.8-flash")
+    assert (result.prompt_tokens, result.cached_prompt_tokens, result.cache_write_tokens) == (20000, 18000, 0)

@@ -29,8 +29,9 @@ class FakeGeminiServer(FakeTransport):
 
     # ── the kit's vocabulary ─────────────────────────────────────────────────
 
-    def reply_text(self, text: str, *, prompt_tokens: int = 11, completion_tokens: int = 7) -> None:
-        self.replies.append({"text": text, "usage": (prompt_tokens, completion_tokens)})
+    def reply_text(self, text: str, *, prompt_tokens: int = 11, completion_tokens: int = 7, cached: int = 0) -> None:
+        """`cached`: the part of the prompt Gemini's implicit cache served (cachedContentTokenCount)."""
+        self.replies.append({"text": text, "usage": (prompt_tokens, completion_tokens), "cached": cached})
 
     def reply_tool_calls(self, calls: list[ToolCall], *, prompt_tokens: int = 11, completion_tokens: int = 7) -> None:
         self.replies.append({"tool_calls": list(calls), "usage": (prompt_tokens, completion_tokens)})
@@ -80,7 +81,12 @@ def _generated(reply: dict, model: str) -> dict:
         parts.append({"text": reply["text"]})
     return {
         "candidates": [{"content": {"role": "model", "parts": parts}, "finishReason": "STOP", "index": 0}],
-        "usageMetadata": {"promptTokenCount": prompt, "candidatesTokenCount": completion, "totalTokenCount": prompt + completion},
+        "usageMetadata": {
+            "promptTokenCount": prompt,
+            "candidatesTokenCount": completion,
+            "totalTokenCount": prompt + completion,
+            "cachedContentTokenCount": reply.get("cached", 0),
+        },
         "modelVersion": model,
         "responseId": "resp-1",
     }

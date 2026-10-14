@@ -57,6 +57,10 @@ list. A snapshot id (`gemini-2.5-flash-001`) takes its base id's price; a model 
 estimate, and Marvin shows the run as unpriced rather than free. A new price is a release of this package,
 not of Marvin.
 
+**Prompt caching.** Gemini caches a repeated prompt prefix on its own (implicit caching) and bills the cached part
+at a tenth of the input rate. The usage reports it (`cached_prompt_tokens`, from `cachedContentTokenCount`) and
+every chat-model price here carries the cached rate, so Marvin's estimate matches the bill.
+
 ## Develop
 
 ```sh

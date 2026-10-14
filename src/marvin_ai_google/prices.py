@@ -9,22 +9,29 @@ model's price is a release of this package, not of Marvin.
 
 from marvin_integration_sdk.ai import ModelPrice
 
+
+def _price(input_per_1m: float, output_per_1m: float) -> ModelPrice:
+    """A model's price with Gemini's cache rate: a cached (implicitly or explicitly) prompt token is a tenth of the
+    input rate (``cache_read_input_token_cost`` in the feed); there is no write premium."""
+    return ModelPrice(input_per_1m=input_per_1m, output_per_1m=output_per_1m, cached_input_per_1m=round(input_per_1m * 0.1, 6))
+
+
 GOOGLE_PRICES: dict[str, ModelPrice] = {
     # Gemini 3.x
-    "gemini-3.8-flash": ModelPrice(input_per_1m=0.75, output_per_1m=3.75),
-    "gemini-3.7-flash": ModelPrice(input_per_1m=0.75, output_per_1m=3.75),
-    "gemini-3.6-flash": ModelPrice(input_per_1m=0.75, output_per_1m=3.75),
-    "gemini-3.5-flash": ModelPrice(input_per_1m=1.50, output_per_1m=9.00),
-    "gemini-3.5-flash-lite": ModelPrice(input_per_1m=0.30, output_per_1m=2.50),
-    "gemini-3.1-flash-lite": ModelPrice(input_per_1m=0.25, output_per_1m=1.50),
+    "gemini-3.8-flash": _price(0.75, 3.75),
+    "gemini-3.7-flash": _price(0.75, 3.75),
+    "gemini-3.6-flash": _price(0.75, 3.75),
+    "gemini-3.5-flash": _price(1.50, 9.00),
+    "gemini-3.5-flash-lite": _price(0.30, 2.50),
+    "gemini-3.1-flash-lite": _price(0.25, 1.50),
     # Gemini 2.5
-    "gemini-2.5-pro": ModelPrice(input_per_1m=1.25, output_per_1m=10.00),
-    "gemini-2.5-flash": ModelPrice(input_per_1m=0.30, output_per_1m=2.50),
-    "gemini-2.5-flash-lite": ModelPrice(input_per_1m=0.10, output_per_1m=0.40),
+    "gemini-2.5-pro": _price(1.25, 10.00),
+    "gemini-2.5-flash": _price(0.30, 2.50),
+    "gemini-2.5-flash-lite": _price(0.10, 0.40),
     # Aliases that follow the newest model of their tier (priced as that model is today).
-    "gemini-pro-latest": ModelPrice(input_per_1m=2.00, output_per_1m=12.00),
-    "gemini-flash-latest": ModelPrice(input_per_1m=0.75, output_per_1m=3.75),
-    "gemini-flash-lite-latest": ModelPrice(input_per_1m=0.30, output_per_1m=2.50),
+    "gemini-pro-latest": _price(2.00, 12.00),
+    "gemini-flash-latest": _price(0.75, 3.75),
+    "gemini-flash-lite-latest": _price(0.30, 2.50),
     # Embeddings are billed on input only.
     "gemini-embedding-001": ModelPrice(input_per_1m=0.15, output_per_1m=0.0),
     "gemini-embedding-2": ModelPrice(input_per_1m=0.20, output_per_1m=0.0),

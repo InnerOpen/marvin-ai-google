@@ -122,6 +122,9 @@ def gemini_result(resp, model: str) -> CompletionResult:
             text.append(part.text)
     usage = resp.usage_metadata
     prompt = (usage.prompt_token_count or 0) if usage else 0
+    # Gemini caches a repeated prefix on its own (implicit caching) and bills that part at a tenth; it is a part of
+    # prompt_token_count.
+    cached = (getattr(usage, "cached_content_token_count", None) or 0) if usage else 0
     # Thinking tokens are billed as output but counted apart from the candidate's own.
     completion = ((usage.candidates_token_count or 0) + (usage.thoughts_token_count or 0)) if usage else 0
     finish = candidate.finish_reason.value if candidate.finish_reason else "STOP"
@@ -131,6 +134,7 @@ def gemini_result(resp, model: str) -> CompletionResult:
         completion_tokens=completion,
         total_tokens=prompt + completion,
         model=resp.model_version or model,
+        cached_prompt_tokens=min(cached, prompt),
         raw=resp.model_dump(mode="json", exclude_none=True, exclude={"sdk_http_response"}),
         tool_calls=tool_calls,
         stop_reason="tool_calls" if tool_calls else STOP_REASONS.get(finish, finish.lower()),
