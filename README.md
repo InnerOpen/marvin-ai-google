@@ -33,6 +33,10 @@ else changes. **Admin → Plugins** lists `marvin-ai-google` with kind *AI provi
 |---|---|
 | `GOOGLE_API_KEY` | secret, masked; a workspace in *workspace* credential mode uses its own key |
 
+A key whose Google Cloud project has no billing is rationed: the full-size flash models (`gemini-3.8-flash`, `-3.7-`) answer
+503 "high demand" and the 2.5 line 404 "no longer available to new users", while the lite tiers (`gemini-3.5-flash-lite`,
+`gemini-flash-lite-latest`) answer. Enable billing on the project to use the full models; the key stays the same.
+
 The default chat model is `gemini-3.8-flash` and the default embedding model `gemini-embedding-001`
 (3072 dimensions by default). The model list comes from the API (models that can generate content, minus
 embedding, image, speech and live variants).
