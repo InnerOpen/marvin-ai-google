@@ -143,6 +143,7 @@ def gemini_result(resp, model: str) -> CompletionResult:
 
 class GoogleProvider(AIProvider):
     provider_type = "google"
+    logo = "logo.svg"  # the Gemini mark: Marvin shows it beside the provider's name
     display_name = "Google Gemini"
     credentials = (API_KEY,)
     supports_vision = True
